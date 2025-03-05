@@ -12,7 +12,7 @@ def write_lp_file(output_file, facts):
 
 def generate_facts(lines):
     facts = []
-    facts.append(f"gridsize({len(lines)}).\n")  
+    facts.append(f"#const n = {len(lines)}.\n")  
 
     for row, line in enumerate(lines):
         for col, char in enumerate(line):
