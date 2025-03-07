@@ -1,4 +1,4 @@
-#const n = 7.
+#const n = 6.
 
 _drawcircle(0,3, white).
 _drawcircle(1,3, white).

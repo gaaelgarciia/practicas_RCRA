@@ -54,9 +54,5 @@ border_pair(bottom, Y, (C1, C2)) :- row(n-1), col(Y), Y < n-1, _drawcircle(n-1,Y
 border_pair(left, X, (C1, C2)) :- col(0), row(X), X < n-1, _drawcircle(X,0,C1), _drawcircle(X+1,0,C2), C1 != C2.
 border_pair(right, X, (C1, C2)) :- col(n-1), row(X), X < n-1, _drawcircle(X,n-1,C1), _drawcircle(X+1,n-1,C2), C1 != C2.
 
-pattern_count(N, M) :-
-    N = #count{B: border_pair(B, P, (black, white))},
-    M = #count{B: border_pair(B, P, (white, black))}.
-
-% Discard solutions where any pattern appears at least twice
-:- pattern_count(N, M), N >= 2 ; M >= 2.
+% :- #count{B1,P1: border_pair(B1, P1, (black, white))} > 1 , #count{B2,P2: border_pair(B2, P2, (white, black))} > 1.
+:- N = #sum {1,B,P : border_pair(B,P,(white,black)); 1,B,P : border_pair(B,P,(black,white))}, N > 2.
