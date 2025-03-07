@@ -1,4 +1,4 @@
-% Definir el tamaño de la cuadrículaç
+% Definir el tamaño de la cuadrícula
 gridsize(n).
 % Definir filas y columnas (0 a n-1)
 row(0..n-1). 
@@ -7,7 +7,7 @@ col(0..n-1).
 % Asegurar que en cada celda haya exactamente un círculo negro o blanco
 1{_drawcircle(X,Y,black); _drawcircle(X,Y,white)}1 :- row(X), col(Y).
 
-% no pueden haber cuatro del mismo color en un bloque 2x2
+% No pueden haber cuatro del mismo color en un bloque 2x2
 :- row(X), col(Y), X < n-1, Y < n-1,
    _drawcircle(X, Y, C), _drawcircle(X+1, Y, C),
    _drawcircle(X, Y+1, C), _drawcircle(X+1, Y+1, C).
@@ -32,24 +32,20 @@ adjacent(X1, Y1, X2, Y2) :-
     row(X1), col(Y1), X2 = X1, Y2 = Y1 - 1, Y1 > 0.
 
 % Definir alcanzabilidad para cada color
-reachable(X, Y, X, Y, C) :- _drawcircle(X, Y, C). % Cada celda se alcanza a sí misma
+reachable(X, Y, C) :- mincell(C, X, Y).
 
-reachable(X1, Y1, X2, Y2, C) :- 
+reachable(X2, Y2, C) :- 
+    reachable(X1, Y1, C),
     adjacent(X1, Y1, X2, Y2),
-    _drawcircle(X1, Y1, C),
     _drawcircle(X2, Y2, C).
 
-reachable(X1, Y1, X3, Y3, C) :- 
-    reachable(X1, Y1, X2, Y2, C),
-    adjacent(X2, Y2, X3, Y3),
-    _drawcircle(X3, Y3, C).
+% Determinar la celda mínima de cada color
+mincell(C,Z,T) :- C=(black;white), #min{(X,Y): _drawcircle(X,Y,C)}=M, M=(Z,T).
 
-mincell(C,Z,T) :- C=(black;white), #min{(X,Y): _drawcircle(X,Y,C) }=M, M=(Z,T).
+% Asegurar que la celda mínima tenga el color asignado
+_drawcircle(Z, T, C) :- mincell(C, Z, T).
 
-% Asegurar que todas las celdas negras estén conectadas
-:- _drawcircle(X1, Y1, black), _drawcircle(X2, Y2, black), not reachable(X1, Y1, X2, Y2, black).
+% Asegurar que todas las celdas negras estén conectadas a partir de la celda mínima
+:- mincell(C, X0, Y0), _drawcircle(X1, Y1, C), not reachable(X1, Y1, C).
 
-% Asegurar que todas las celdas blancas estén conectadas
-:- _drawcircle(X1, Y1, white), _drawcircle(X2, Y2, white), not reachable(X1, Y1, X2, Y2, white).
 
- #show mincell/3.
