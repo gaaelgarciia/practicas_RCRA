@@ -47,9 +47,6 @@ reachable(X1, Y1, X3, Y3, C) :-
 mincell(C,Z,T) :- C=(black;white), #min{(X,Y): _drawcircle(X,Y,C) }=M, M=(Z,T).
 
 % Asegurar que todas las celdas negras estén conectadas
-:- _drawcircle(X1, Y1, black), _drawcircle(X2, Y2, black), not reachable(X1, Y1, X2, Y2, black).
-
-% Asegurar que todas las celdas blancas estén conectadas
-:- _drawcircle(X1, Y1, white), _drawcircle(X2, Y2, white), not reachable(X1, Y1, X2, Y2, white).
+:- _drawcircle(X1, Y1, C), _drawcircle(X2, Y2, C), not reachable(X1, Y1, X2, Y2, C).
 
  #show mincell/3.
